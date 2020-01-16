@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Breadth_first
+namespace GSA
 {
     class Program
     {
         public class Node
         {
-            public string Name;
-            public int PC;
-            public int SC;
-            public List<Node> MyCildren = new List<Node>();
+            public string name;//charachter
+            public int heuristic;
+            public int Cpath;
+            public List<Node> Childnode = new List<Node>();
         }
 
         public class Memory
         {
-            public List<Node> OpenList = new List<Node>();
-            public List<Node> ClosedList = new List<Node>();
+            public List<Node> Opened = new List<Node>();
+            public List<Node> Closed = new List<Node>();
         }
 
         static public List<Node> Nodes;
@@ -27,341 +27,205 @@ namespace Breadth_first
 
         static void Main(string[] args)
         {
-            Create();
-            Uniform_Algorithm();
-            OutPut_Algorithm();
-            //Try();
+            In_Put();
+            //Out_Put();
+            Gready_Algorithm();
+            Output_Data();
         }
 
-        static public void Create()
+        static public void In_Put() ///input of the tree
         {
             Nodes = new List<Node>();
 
             Node pnn = new Node();
-
-            //Parent1
-            pnn.Name = "S";
-            pnn.PC = 0;
-            pnn.SC = 0;
-
+            /////////////// ParentNode1 ////////////////
+            pnn.name = "S";pnn.heuristic = 0;pnn.Cpath = 0;
+            //ParentChildernn1
+            Node PCh = new Node();PCh.name = "A"; PCh.heuristic = 7; PCh.Cpath = 1;
+            pnn.Childnode.Add(PCh);
+            //ParentChildern2
+            PCh = new Node();PCh.name = "B";PCh.heuristic = 10;PCh.Cpath = 8;
+            pnn.Childnode.Add(PCh);
+            //ParentChildern3
+            PCh = new Node(); PCh.name = "C";PCh.heuristic = 5;PCh.Cpath = 4;
+            pnn.Childnode.Add(PCh);
+            Nodes.Add(pnn);//add s with its children
+            //ParentNode2
+            pnn = new Node();pnn.name = "A"; pnn.heuristic = 7; pnn.Cpath = 1;
+            //ParentChildern1
+            PCh = new Node();PCh.name = "D"; PCh.heuristic = 4;PCh.Cpath = 6;
+            pnn.Childnode.Add(PCh);
+            //ParentChildern2
+            PCh = new Node(); PCh.name = "H";PCh.heuristic = 6;PCh.Cpath = 13;//total path from source to the currant node
+            pnn.Childnode.Add(PCh);
+            Nodes.Add(pnn);
+            //ParentNode3
+            pnn = new Node(); pnn.name = "B";pnn.heuristic = 10;pnn.Cpath = 8;
+            //ParentChildern1
+            PCh = new Node();PCh.name = "H";PCh.heuristic = 6;PCh.Cpath = 9;
+            pnn.Childnode.Add(PCh);
+            //ParentChildern2
+            PCh = new Node();PCh.name = "G1"; PCh.heuristic = 0; PCh.Cpath = 12;
+            pnn.Childnode.Add(PCh);
+            //ParentChildern3
+            PCh = new Node();PCh.name = "J"; PCh.heuristic = 8;PCh.Cpath = 12;
+             pnn.Childnode.Add(PCh);
+            Nodes.Add(pnn);
+            //ParentNode4
+            pnn = new Node();pnn.name = "C";pnn.heuristic = 5;pnn.Cpath = 4;
             //Cildern1
-            Node pnc = new Node();
-            pnc.Name = "A";
-            pnc.PC = 1;
-            pnc.SC = 1;
-            pnn.MyCildren.Add(pnc);
-            //Childer2
-            pnc = new Node();
-            pnc.Name = "B";
-            pnc.PC = 8;
-            pnc.SC = 8;
-            pnn.MyCildren.Add(pnc);
-            //Childer3
-            pnc = new Node();
-            pnc.Name = "C";
-            pnc.PC = 4;
-            pnc.SC = 4;
-            pnn.MyCildren.Add(pnc);
-
+            PCh = new Node();
+            PCh.name = "E";PCh.heuristic = 7;PCh.Cpath = 6;
+            pnn.Childnode.Add(PCh);
+            //ParentChildern2
+            PCh = new Node();PCh.name = "F"; PCh.heuristic = 9;PCh.Cpath = 6;
+            pnn.Childnode.Add(PCh);
             Nodes.Add(pnn);
-
-            //Parent2
-            pnn = new Node();
-            pnn.Name = "A";
-            pnn.PC = 1;
-            pnn.SC = 0;
-
+            //ParentNode5
+            pnn = new Node(); pnn.name = "D"; pnn.heuristic = 4; pnn.Cpath = 6;
             //Cildern1
-            pnc = new Node();
-            pnc.Name = "D";
-            pnc.PC = 6;
-            pnc.SC = 5;
-            pnn.MyCildren.Add(pnc);
-            //Childer2
-            pnc = new Node();
-            pnc.Name = "H";
-            pnc.PC = 8;
-            pnc.SC = 12;
-            pnn.MyCildren.Add(pnc);
-
+            PCh = new Node();PCh.name = "H";PCh.heuristic = 6;PCh.Cpath = 2;
+            pnn.Childnode.Add(PCh);
             Nodes.Add(pnn);
-
-            //Parent3
-            pnn = new Node();
-            pnn.Name = "B";
-            pnn.PC = 8;
-            pnn.SC = 10;
-
+            //ParentNode6
+            pnn = new Node(); pnn.name = "E";pnn.heuristic = 7; pnn.Cpath = 6;
             //Cildern1
-            pnc = new Node();
-            pnc.Name = "H";
-            pnc.PC = 9;
-            pnc.SC = 1;
-            pnn.MyCildren.Add(pnc);
-            //Childer2
-            pnc = new Node();
-            pnc.Name = "G1";
-            pnc.PC = 12;
-            pnc.SC = 4;
-            pnn.MyCildren.Add(pnc);
-            //Childer3
-            pnc = new Node();
-            pnc.Name = "J";
-            pnc.PC = 12;
-            pnc.SC = 4;
-            pnn.MyCildren.Add(pnc);
-
+            PCh = new Node(); PCh.name = "F"; PCh.heuristic = 9; PCh.Cpath = 16;
+            pnn.Childnode.Add(PCh);
             Nodes.Add(pnn);
-
-            //Parent4
-            pnn = new Node();
-            pnn.Name = "C";
-            pnn.PC = 4;
-            pnn.SC = 0;
-
+            //ParentNode7
+            pnn = new Node();pnn.name = "F"; pnn.heuristic = 9;pnn.Cpath = 0;
             //Cildern1
-            pnc = new Node();
-            pnc.Name = "E";
-            pnc.PC = 6;
-            pnc.SC = 2;
-            pnn.MyCildren.Add(pnc);
-            //Childer2
-            pnc = new Node();
-            pnc.Name = "F";
-            pnc.PC = 10;
-            pnc.SC = 6;
-            pnn.MyCildren.Add(pnc);
-
+            PCh = new Node();
+            PCh.name = "G2"; PCh.heuristic = 0;PCh.Cpath = 2;
+            pnn.Childnode.Add(PCh);
             Nodes.Add(pnn);
-
-            //Parent5
-            pnn = new Node();
-            pnn.Name = "D";
-            pnn.PC = 6;
-            pnn.SC = 0;
-
+            //ParentNode8
+            pnn = new Node(); pnn.name = "G1";pnn.heuristic = 0;pnn.Cpath = 0;
+            Nodes.Add(pnn);
+            //ParentNode9
+            pnn = new Node();pnn.name = "H";pnn.heuristic = 6;pnn.Cpath = 8;
             //Cildern1
-            pnc = new Node();
-            pnc.Name = "H";
-            pnc.PC = 8;
-            pnc.SC = 2;
-            pnn.MyCildren.Add(pnc);
-
+            PCh = new Node();PCh.name = "J"; PCh.heuristic = 8; PCh.Cpath = 4;
+            pnn.Childnode.Add(PCh);
             Nodes.Add(pnn);
-
-            //Parent6
-            pnn = new Node();
-            pnn.Name = "E";
-            pnn.PC = 6;
-            pnn.SC = 0;
-
+            //ParentNode10
+            pnn = new Node(); pnn.name = "J";pnn.heuristic = 8;pnn.Cpath = 12;
             //Cildern1
-            pnc = new Node();
-            pnc.Name = "F";
-            pnc.PC = 16;
-            pnc.SC = 10;
-            pnn.MyCildren.Add(pnc);
-
+            PCh = new Node();PCh.name = "G2"; PCh.heuristic = 0;PCh.Cpath = 2;
+            pnn.Childnode.Add(PCh);
             Nodes.Add(pnn);
-
-            //Parent7
-            pnn = new Node();
-            pnn.Name = "F";
-            pnn.PC = 10;
-            pnn.SC = 0;
-
-            //Cildern1
-            pnc = new Node();
-            pnc.Name = "G2";
-            pnc.PC = 12;
-            pnc.SC = 2;
-            pnn.MyCildren.Add(pnc);
-
-            Nodes.Add(pnn);
-
-            //Parent8
-            pnn = new Node();
-            pnn.Name = "G1";
-            pnn.PC = 12;
-            pnn.SC = 0;
-
-            Nodes.Add(pnn);
-
-            //Parent9
-            pnn = new Node();
-            pnn.Name = "H";
-            pnn.PC = 8;
-            pnn.SC = 0;
-
-            //Cildern1
-            pnc = new Node();
-            pnc.Name = "J";
-            pnc.PC = 12;
-            pnc.SC = 4;
-            pnn.MyCildren.Add(pnc);
-
-            Nodes.Add(pnn);
-
-            //Parent10
-            pnn = new Node();
-            pnn.Name = "J";
-            pnn.PC = 12;
-            pnn.SC = 0;
-
-            //Cildern1
-            pnc = new Node();
-            pnc.Name = "G2";
-            pnc.PC = 14;
-            pnc.SC = 2;
-            pnn.MyCildren.Add(pnc);
-
-            Nodes.Add(pnn);
-
-            //Parent11
-            pnn = new Node();
-            pnn.Name = "G2";
-            pnn.PC = 12;
-            pnn.SC = 0;
-
+            //ParentNode11
+            pnn = new Node(); pnn.name = "G2"; pnn.heuristic = 0; pnn.Cpath = 0;
             Nodes.Add(pnn);
         }
 
-        static public void OutPut()
+        static public void Out_Put()
         {
             int i = 0, j = 0;
 
             for (i = 0; i < Nodes.Count; i++)
             {
-                Console.WriteLine(Nodes[i].Name + "---------");
-                for (j = 0; j < Nodes[i].MyCildren.Count; j++)
+                Console.WriteLine(Nodes[i].name + "---------");
+                for (j = 0; j < Nodes[i].Childnode.Count; j++)
                 {
-                    Console.WriteLine(Nodes[i].MyCildren[j].Name);
+                    Console.WriteLine(Nodes[i].Childnode[j].name);
                 }
             }
 
         }
-        static public void Try()
-        {
-            int f;
-            Console.WriteLine("\n                            uniform cost Algorith                   \n");
-            Console.WriteLine("OpenList                                      ClosedList");
-            Console.WriteLine("[S(0)]                                       []");
-            Console.WriteLine("[A(1),C(4),B(8)]                           [S(0)]");
-            Console.WriteLine("[C(4),D(6),B(8),H(13)]                   [S(0),A(1)]");
-            Console.WriteLine("[D(6),E(6),B(8),F(10),H(13)]            [S(0),A(1),C(4)]");
-            Console.WriteLine("[E(6),B(8),H(8),F(10)]                 [S(0),A(1),C(4),D(6)]");
-            Console.WriteLine("[B(8),H(8),F(10)]                    [S(0),A(1),C(4),D(6),E(6)]");
-            Console.WriteLine("[H(8),F(10),G1(12),J(12)]           [S(0),A(1),C(4),D(6),E(6),B(8)]");
-            Console.WriteLine("[F(10),G1(12),J(12)]              [S(0),A(1),C(4),D(6),E(6),B(8),H(8)]");
-            Console.WriteLine("[G1(12),G2(12),J(12)]            [S(0),A(1),C(4),D(6),E(6),B(8),H(8),F(10)]");
-            f = Console.Read();
-        }
 
-        static public void Uniform_Algorithm()
+        static public void Gready_Algorithm()
         {
             int Flag = 0;
-            All = new List<Memory>(); List<Node> OpenList = new List<Node>();
-            List<Node> ClosedList = new List<Node>();
+            All = new List<Memory>();
+            List<Node> Opened = new List<Node>();
+            List<Node> Closed = new List<Node>();
             List<Node> Temp = new List<Node>();
-            Node TreeN = new Node();
-            TreeN = Nodes[0];
-            OpenList.Add(TreeN);
+
+            Node MyNode = new Node();
+            MyNode = Nodes[0];
+
+            Opened.Add(MyNode);
+
             Memory New = new Memory();
-            New.OpenList = OpenList;
-            New.ClosedList = new List<Node>();
+            New.Opened = Opened;
+            New.Closed = new List<Node>();
             All.Add(New);
+
             while (true)
             {
-                int i = 0, j1 = 0, k = 0, z = 0;
-                if (TreeN.Name == "G1" || TreeN.Name == "G2")
+                if (MyNode.name == "G1" || MyNode.name == "G2")//make sure reach The gool node
                 {
                     break;
                 }
+                int i = 0, j1 = 0, k = 0, z = 0;
                 for (i = 0; i < Nodes.Count; i++)
                 {
-                    if (Nodes[i].Name == OpenList[0].Name)
+                    if (Nodes[i].name == Opened[0].name)
                     {
                         Temp = new List<Node>();
-                        if (OpenList[0].Name == "G1" || OpenList[0].Name == "G2")
+                        if (Opened[0].name == "G1" || Opened[0].name == "G2")//reach The gool
                         {
-                            TreeN = new Node();
-                            TreeN.Name = OpenList[0].Name;
-                            break; ClosedList.Add(OpenList[0]);
-
-                            for (j1 = 1; j1 < OpenList.Count; j1++)
+                            MyNode = new Node();
+                            MyNode.name = Opened[0].name;
+                             break;
+                            Closed.Add(Opened[0]);
+                           
+                            for (j1 = 1; j1 < Opened.Count; j1++){Temp.Add(Opened[j1]);}
+                            if (Nodes[i].Childnode.Count > 0)
                             {
-                                Temp.Add(OpenList[j1]);
-                            }
-                            if (Nodes[i].MyCildren.Count > 0)
-                            {
-                                for (k = 0; k < Nodes[i].MyCildren.Count; k++)
-                                {
+                                for (k = 0; k < Nodes[i].Childnode.Count; k++){
                                     Flag = 0;
-                                    for (z = 0; z < OpenList.Count; z++)
-                                    {
-                                        if (Nodes[i].MyCildren[k].Name == OpenList[z].Name)
-                                        {
-                                            Flag = 1; break;
-                                        }
+                                    for (z = 0; z < Opened.Count; z++){
+                                        if (Nodes[i].Childnode[k].name == Opened[z].name){ Flag = 1; break; }
                                     }
-                                    if (Flag == 0)
-                                    {
-                                        for (z = 0; z < ClosedList.Count; z++)
-                                        {
-                                            if (Nodes[i].MyCildren[k].Name == ClosedList[z].Name)
+                                     if (Flag == 0){
+                                        for (z = 0; z < Closed.Count; z++){
+                                        if (Nodes[i].Childnode[k].name == Closed[z].name)
                                             { Flag = 1; break; }
-                                        }
-                                    }
+                                         }   
+                                     }   
                                     if (Flag == 0)
-                                    { Temp.Add(Nodes[i].MyCildren[k]); }
-                                }
+                                    { Temp.Add(Nodes[i].Childnode[k]); }}
                             }
-                            OpenList = Temp;
-                            /////sort build on heuristic estimate/////////////////////////
-                            List<Node> SortedList = OpenList.OrderBy(o => o.PC).ToList();
-                            OpenList = SortedList;
+                            Opened = Temp;
+                            ////
+                            List<Node> SortedList = Opened.OrderBy(o => o.heuristic).ToList();
+                            Opened = SortedList;
                             New = new Memory();
-                            New.OpenList = OpenList;
-                            for (j1 = 0; j1 < ClosedList.Count; j1++)
-                            {
-                                New.ClosedList.Add(ClosedList[j1]);
-                            }
+                            New.Opened = Opened;
+                            for (j1 = 0; j1 < Closed.Count; j1++)
+                            {New.Closed.Add(Closed[j1]);} // add to close list in the memory class
                             All.Add(New);
                         }
                         else
                         {
-                            ClosedList.Add(OpenList[0]);
-                            for (j1 = 1; j1 < OpenList.Count; j1++)
-                            {
-                                Temp.Add(OpenList[j1]);
+                            Closed.Add(Opened[0]);
+                            for (j1 = 1; j1 < Opened.Count; j1++){
+                                Temp.Add(Opened[j1]);
                             }
-
-                            if (Nodes[i].MyCildren.Count > 0)
-                            {
-                                for (k = 0; k < Nodes[i].MyCildren.Count; k++)
-                                {
-                                    Flag = 0;
-                                    for (z = 0; z < OpenList.Count; z++)
-                                    {
-                                        if (Nodes[i].MyCildren[k].Name == OpenList[z].Name)
+                            if (Nodes[i].Childnode.Count > 0){
+                            for (k = 0; k < Nodes[i].Childnode.Count; k++)
+                                {Flag = 0;
+                                   for (z = 0; z < Opened.Count; z++){
+                                        if (Nodes[i].Childnode[k].name == Opened[z].name)
                                         { Flag = 1; break; }
                                     }
-                                    if (Flag == 0)
-                                    {
-                                        for (z = 0; z < ClosedList.Count; z++)
-                                        {
-                                            if (Nodes[i].MyCildren[k].Name == ClosedList[z].Name)
+                                    if (Flag == 0) {
+                                       for (z = 0; z < Closed.Count; z++){
+                                        if (Nodes[i].Childnode[k].name == Closed[z].name)
                                             { Flag = 1; break; }
                                         }
-                                    }
-                                    if (Flag == 0) { Temp.Add(Nodes[i].MyCildren[k]); }
-                                }
-                            } OpenList = Temp;
-                            List<Node> SortedList = OpenList.OrderBy(o => o.PC).ToList();
-                            OpenList = SortedList; New = new Memory(); New.OpenList = OpenList;
-                            for (j1 = 0; j1 < ClosedList.Count; j1++)
-                            {
-                                New.ClosedList.Add(ClosedList[j1]);
+                                      }  
+                                      if (Flag == 0)
+                                    { Temp.Add(Nodes[i].Childnode[k]); }  }  }   
+                                  Opened = Temp;
+                            List<Node> SortedList = Opened.OrderBy(o => o.heuristic).ToList();
+                            Opened = SortedList;New = new Memory();
+                            New.Opened = Opened;// Edit Open list in the memory class
+                            for (j1 = 0; j1 < Closed.Count; j1++){
+                                New.Closed.Add(Closed[j1]);
                             }
                             All.Add(New);
                         }
@@ -371,43 +235,41 @@ namespace Breadth_first
             }
         }
 
-
-
-
-        static public void OutPut_Algorithm()
+        static public void Output_Data() ///open and close out_put 
         {
-            Console.WriteLine("\n                            uniform cost Algorith                   \n");
-            Console.WriteLine("OpenList                           ClosedList");
+            Console.WriteLine("\n                            Gready Algorith                   \n");
+            Console.WriteLine("Opened                           Closed");
             int i = 0, j = 0;
             for (i = 0; i < All.Count; i++)
             {
                 Console.Write("[");
-                for (j = 0; j < All[i].OpenList.Count; j++)
+                for (j = 0; j < All[i].Opened.Count; j++)
                 {
-                    if (j == All[i].OpenList.Count - 1)
-                        Console.Write(All[i].OpenList[j].Name + "(" + All[i].OpenList[j].PC + ")" + "]");
+                    if (j == All[i].Opened.Count - 1)
+                        Console.Write(All[i].Opened[j].name + "(" + All[i].Opened[j].heuristic + ")" + "]");
                     else
-                        Console.Write(All[i].OpenList[j].Name + "(" + All[i].OpenList[j].PC + ")" + ",");
+                        Console.Write(All[i].Opened[j].name + "(" + All[i].Opened[j].heuristic + ")" + ",");
                 }
-                if (All[i].ClosedList.Count == 0)
+                if (All[i].Closed.Count == 0)
                 {
-                    Console.Write("                       [");
+                    Console.Write("                              [");
                     Console.WriteLine("]");
                 }
                 else
                 {
                     Console.Write("                [");
-                    for (j = 0; j < All[i].ClosedList.Count; j++)
+                    for (j = 0; j < All[i].Closed.Count; j++)
                     {
-                        if (j == All[i].ClosedList.Count - 1)
-                            Console.WriteLine(All[i].ClosedList[j].Name + "(" + All[i].ClosedList[j].PC + ")" + "]");
+                        if (j == All[i].Closed.Count - 1)
+                            Console.WriteLine(All[i].Closed[j].name + "(" + All[i].Closed[j].heuristic + ")" + "]");
                         else
-                            Console.Write(All[i].ClosedList[j].Name + "(" + All[i].ClosedList[j].PC + ")" + ",");
-
+                            Console.Write(All[i].Closed[j].name + "(" + All[i].Closed[j].heuristic + ")" + ",");
+                        
                     }
                 }
             }
-            j = Console.Read();
+            j = Console.Read();//just to delay debug Cpathreen, to quit debug click any key
+           
         }
     }
 }
