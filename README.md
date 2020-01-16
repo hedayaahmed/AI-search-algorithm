@@ -1,2 +1,3 @@
 # AI-search-algorithm
-Uninformed and informed AI search algorithms. Greedy. Depth first. Uniform
+Uninformed and informed AI search algorithms unsing c#.
+Greedy. Depth first. Uniform
